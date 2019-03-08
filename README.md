@@ -8,4 +8,4 @@ Serverless lambda to be used with Zeit Now.
 
     yarn dev
 
-Go to http://localhost:3037/screenshot?url=https://www.weld.io
+Go to http://localhost:3037/screenshot/2?url=https://www.weld.io

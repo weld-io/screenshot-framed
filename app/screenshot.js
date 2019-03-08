@@ -6,6 +6,8 @@
 
 const fs = require('fs')
 
+const parseRequestParams = url => (url.split('?')[0] || '/').substr(1).split('/')
+
 const parseRequestQuery = url => (url.split('?')[1] || '')
   .split('&')
   .reduce((result, propValue) => {
@@ -15,11 +17,13 @@ const parseRequestQuery = url => (url.split('?')[1] || '')
   }, {})
 
 const serveScreenshot = function (req, res) {
+  const params = parseRequestParams(req.url)
   const query = parseRequestQuery(req.url)
   if (!query.url) throw new Error(`No "url" specified: ${req.url}`)
   const pageUrl = decodeURIComponent(query.url)
   res.setHeader('Content-Type', 'text/html')
-  res.end(getHTML({ pageUrl, template: query.template }))
+  const template = params[1]
+  res.end(getHTML({ pageUrl, template }))
 }
 
 const servePublic = function (req, res) {
@@ -37,7 +41,6 @@ const serve404 = function (req, res) {
 
 const router = async function (req, res) {
   try {
-    console.log(`url`, req.url)
     const { url } = req
     if (url.includes('/screenshot')) {
       serveScreenshot(req, res)
