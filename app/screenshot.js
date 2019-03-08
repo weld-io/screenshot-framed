@@ -67,14 +67,14 @@ const getHTML = ({ pageUrl }) => `<!DOCTYPE html>
   padding: 0;
 }
 
-main img {
+#browser {
   position: absolute;
   width: 1280px;
   height: 823px; /* 0.6428 */
   z-index: 2;
 }
 
-main iframe {
+#content {
   position: absolute;
   left: 23px;
   top: 106px;
@@ -87,9 +87,9 @@ main iframe {
 </head>
 <body>
 
-<main id="content">
-  <img src="/public/weld_browser@2x.png" alt="Browser" />
-  <iframe src="${pageUrl}" frameborder="0" />
+<main>
+  <img id="browser" src="/public/weld_browser@2x.png" alt="Browser" />
+  <img id="content" src="https://scraping-service.now.sh/api/image?width=1234&height=694&dpr=1&url=${pageUrl}" alt="Web page" />
 </main>
 
 </body>
