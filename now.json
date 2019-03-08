@@ -8,6 +8,7 @@
     { "src": "/", "dest": "/app/public/index.html" },
     { "src": "/favicon.ico", "dest": "/app/public/favicon.ico" },
     { "src": "/public/weld_browser@2x.png", "dest": "/app/public/weld_browser@2x.png" },
+    { "src": "/public/content_placeholder.png", "dest": "/app/public/content_placeholder.png" },
     { "src": "/screenshot?", "dest": "/app/screenshot.js" }
   ],
   "env": {
