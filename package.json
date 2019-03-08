@@ -1,0 +1,21 @@
+{
+  "name": "screenshot-framed",
+  "version": "0.1.0",
+  "description": "Serve a screenshot inside an image frame.",
+  "author": "Weld (www.weld.io)",
+  "license": "MIT",
+  "main": "app/server.js",
+  "scripts": {
+    "dev": "nodemon --max_old_space_size=512 app/server.js",
+    "start": "node app/server.js",
+    "test": "node test/app.js",
+    "lint": "standard",
+    "fix": "standard --fix"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "standard": "^12.0.1"
+  }
+}

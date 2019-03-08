@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "app/public/*", "use": "@now/static" },
+    { "src": "app/screenshot.js", "use": "@now/node", "config": { "maxLambdaSize": "40mb" } }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/app/public/index.html" },
+    { "src": "/favicon.ico", "dest": "/app/public/favicon.ico" },
+    { "src": "/public/weld_browser@2x.png", "dest": "/app/public/weld_browser@2x.png" },
+    { "src": "/screenshot?", "dest": "/app/screenshot.js" }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
