@@ -6,7 +6,55 @@
 
 const fs = require('fs')
 
-const getHTML = ({property}) => `<!DOCTYPE html> 
+const parseRequestQuery = url => (url.split('?')[1] || '')
+  .split('&')
+  .reduce((result, propValue) => {
+    const key = propValue.split('=')[0]
+    if (key) result[key] = propValue.split('=')[1]
+    return result
+  }, {})
+
+const serveScreenshot = function (req, res) {
+  const query = parseRequestQuery(req.url)
+  if (!query.url) throw new Error(`No "url" specified: ${req.url}`)
+  const pageUrl = decodeURIComponent(query.url)
+  res.setHeader('Content-Type', 'text/html')
+  res.end(getHTML({ pageUrl }))
+}
+
+const servePublic = function (req, res) {
+  const filePath = `./app${req.url}`
+  res.writeHead(200, { 'Content-Type': 'image/png' })
+  fs.createReadStream(filePath).pipe(res)
+}
+
+const serve404 = function (req, res) {
+  const message = `Not found: ${req.url}`
+  res.statusCode = 404
+  res.statusMessage = message
+  res.end(message)
+}
+
+const router = async function (req, res) {
+  try {
+    console.log(`url`, req.url)
+    const { url } = req
+    if (url.includes('/screenshot')) {
+      serveScreenshot(req, res)
+    } else if (url.includes('/public')) {
+      servePublic(req, res)
+    } else {
+      serve404(req, res)
+    }
+  } catch (err) {
+    console.error(err.message)
+    res.statusCode = 500
+    res.statusMessage = err.message
+    res.end(err.message)
+  }
+}
+
+const getHTML = ({ pageUrl }) => `<!DOCTYPE html> 
 <html lang="en-us">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -28,10 +76,10 @@ main img {
 
 main iframe {
   position: absolute;
-  width: 1234px;
-  height: 693px;
   left: 23px;
-  top: 107px;
+  top: 106px;
+  width: 1234px;
+  height: 694px;
   z-index: 1;
 }
 
@@ -41,45 +89,10 @@ main iframe {
 
 <main id="content">
   <img src="/public/weld_browser@2x.png" alt="Browser" />
-  <iframe src="https://www.dn.se/" frameborder="0" />
+  <iframe src="${pageUrl}" frameborder="0" />
 </main>
 
 </body>
 </html>`
-
-const serveScreenshot = function (req, res) {
-  res.setHeader('Content-Type', 'text/html')
-  res.end(getHTML({}))
-}
-
-const servePublic = function (req, res) {
-  const filePath = `./app${req.url}`
-  res.writeHead(200, {'Content-Type': 'image/png'})
-  fs.createReadStream(filePath).pipe(res)
-}
-
-const serve404 = function (req, res) {
-  res.setHeader({'Content-Type': 'text/html'})
-  res.end('Not found')
-}
-
-const router = async function (req, res) {
-  try {
-    console.log(`url`, req.url)
-    const { url } = req
-    if (url.includes('/screenshot')) {
-      serveScreenshot(req, res)
-    } else if (url.includes('/public')) {
-      servePublic(req, res)
-    } else {
-      serve404(req, res)
-    }
-  } catch (err) {
-    res.statusCode = 500
-    res.setHeader('Content-Type', 'text/html')
-    res.end(JSON.stringify({ code: res.statusCode, message: err.message }))
-    console.error(err.message)
-  }
-}
 
 module.exports = router
