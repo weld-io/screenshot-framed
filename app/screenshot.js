@@ -19,7 +19,7 @@ const serveScreenshot = function (req, res) {
   if (!query.url) throw new Error(`No "url" specified: ${req.url}`)
   const pageUrl = decodeURIComponent(query.url)
   res.setHeader('Content-Type', 'text/html')
-  res.end(getHTML({ pageUrl }))
+  res.end(getHTML({ pageUrl, template: query.template }))
 }
 
 const servePublic = function (req, res) {
@@ -54,7 +54,7 @@ const router = async function (req, res) {
   }
 }
 
-const getHTML = ({ pageUrl }) => `<!DOCTYPE html> 
+const getHTML = ({ pageUrl, template }) => `<!DOCTYPE html> 
 <html lang="en-us">
 <head>
 <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -83,6 +83,11 @@ const getHTML = ({ pageUrl }) => `<!DOCTYPE html>
   z-index: 1;
 }
 
+#overlay {
+  position: absolute;
+  z-index: 3;
+}
+
 </style>
 </head>
 <body>
@@ -90,6 +95,7 @@ const getHTML = ({ pageUrl }) => `<!DOCTYPE html>
 <main>
   <img id="browser" src="/public/weld_browser@2x.png" alt="Browser" />
   <img id="content" src="https://scraping-service.now.sh/api/image?width=1234&height=694&dpr=1&url=${pageUrl}" alt="Web page" />
+  ${template === '2' ? '<img id="overlay" src="/public/content_placeholder.png" alt="Placeholder" style="left: 26px;top: 261px;width: 1228px;height: auto;" />' : ''}
 </main>
 
 </body>
