@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "alias": ["screenshot-framed"],
   "builds": [
     { "src": "app/public/*", "use": "@now/static" },
     { "src": "app/screenshot.js", "use": "@now/node", "config": { "maxLambdaSize": "40mb" } }
