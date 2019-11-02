@@ -97,7 +97,7 @@ const getHTML = ({ pageUrl, template }) => `<!DOCTYPE html>
 
 <main>
   <img id="browser" src="/public/weld_browser@2x.png" alt="Browser" />
-  <img id="content" src="https://scraping-service.now.sh/api/image?width=1234&height=694&dpr=1&url=${pageUrl}" alt="Web page" />
+  <img id="content" src="https://scraping-service.now.sh/api/image?time=networkidle0&width=1234&height=694&dpr=1&url=${pageUrl}" alt="Web page" />
   ${template === '2' ? '<img id="overlay" src="/public/content_placeholder.png" alt="Placeholder" style="left: 26px;top: 261px;width: 1228px;height: auto;" />' : ''}
 </main>
 
